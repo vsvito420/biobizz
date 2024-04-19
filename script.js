@@ -47,3 +47,20 @@ for (const [name, { checked }] of Object.entries(fertilizers)) {
 
   document.querySelector(`.fertilizers label[for="${name}"]`).appendChild(input);
 }
+
+
+const weekSlider = document.getElementById("week");
+const weekValue = document.getElementById("weekValue");
+weekValue.textContent = weekSlider.value;
+
+weekSlider.addEventListener("input", () => {
+  weekValue.textContent = weekSlider.value;
+});
+
+const wateringSlider = document.getElementById("watering");
+const wateringValue = document.getElementById("wateringValue");
+wateringValue.textContent = wateringSlider.value;
+
+wateringSlider.addEventListener("input", () => {
+  wateringValue.textContent = wateringSlider.value;
+});

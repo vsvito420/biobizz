@@ -10,6 +10,18 @@ body {
     flex-direction: column;
   }
   
+  .fertilizers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .fertilizers label {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+  }
+  
   label {
     margin-top: 10px;
   }
@@ -27,5 +39,35 @@ body {
   
   .hidden {
     display: none;
+  }
+  
+.slider-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .slider {
+    width: 80%;
+    margin-right: 10px;
+  }
+  
+  .slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background-color: #4caf50;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  
+  .slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background-color: #4caf50;
+    border-radius: 50%;
+    cursor: pointer;
   }
   

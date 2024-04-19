@@ -13,30 +13,30 @@
 <body>
   <h1>Dünger Rechner</h1>
   <div class="container">
-    <label for="week">Woche:</label>
-    <input type="number" id="week" min="0" max="10">
+    <div class="slider-container">
+      <label for="week">Woche:</label>
+      <input type="range" id="week" min="0" max="10" value="0" class="slider">
+      <span id="weekValue">0</span>
+    </div>
 
-    <label for="watering">Menge an Wasser (in ml):</label>
-    <input type="number" id="watering" min="0">
+    <div class="slider-container">
+      <label for="watering">Menge an Wasser (in ml):</label>
+      <input type="range" id="watering" min="0" max="2000" value="0" step="100" class="slider">
+      <span id="wateringValue">0</span>
+    </div>
 
     <div class="fertilizers">
       <label for="rootJuice">Root-Juice:</label>
-      <input type="checkbox" id="rootJuice" checked>
 
       <label for="bioGrow">BioGrow:</label>
-      <input type="checkbox" id="bioGrow" checked>
 
       <label for="bioBloom">BioBloom:</label>
-      <input type="checkbox" id="bioBloom" checked>
 
       <label for="bioHeaven">BioHeaven:</label>
-      <input type="checkbox" id="bioHeaven" checked>
 
       <label for="topMax">Top-Max:</label>
-      <input type="checkbox" id="topMax" checked>
 
       <label for="actiVera">Acti-Vera:</label>
-      <input type="checkbox" id="actiVera" checked>
     </div>
 
     <button id="calculate">Berechnen</button>
