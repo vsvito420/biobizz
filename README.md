@@ -2,4 +2,4 @@
 
 ## HTML CSS JS
 
-![BiobizzSchedule](./image.png)
+![BiobizzSchedule](./image2.png)
