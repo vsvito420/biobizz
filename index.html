@@ -14,16 +14,16 @@
     <title>Dünger Rechner</title>
 </head>
 
-<body>
+<body style="background-color:#333333;"> 
     
-    <div>
+    <div style="background-color:white;" style="background-color:#9b9b9b; border-color: black; margin: 1%;">
         <h1>BioBizz Dünger Rechner</h1>
         <hr>
         <h2><a href="https://github.com/vsvito420/biobizz">vsvito420 auf GitHub</a></h2>
-        <img src="image.png" width="90%">
+        <img src="image2.png" width="90%">
     </div>
 
-    <div class="container">
+    <div class="container" style="background-color:#9b9b9b; border-color: black; margin: 1%;">
         <div class="slider-container">
             <label for="week">Woche:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</label>
             <input type="range" id="week" min="0" max="10" value="0" class="slider">
@@ -36,18 +36,15 @@
             <span id="wateringValue">0</span>
         </div>
 
-        <div class="fertilizers">
-            <label for="rootJuice">Root-Juice:</label>
-
-            <label for="bioGrow">BioGrow:</label>
-
-            <label for="bioBloom">BioBloom:</label>
-
-            <label for="bioHeaven">BioHeaven:</label>
-
-            <label for="topMax">Top-Max:</label>
-
-            <label for="actiVera">Acti-Vera:</label>
+        <div class="fertilizers" style="align-items: right">
+            <strong>
+                <label for="rootJuice">Root-Juice:</label>
+                <label for="bioGrow">BioGrow:</label>
+                <label for="bioBloom">BioBloom:</label>
+                <label for="bioHeaven">BioHeaven:</label>
+                <label for="topMax">Top-Max:</label>
+                <label for="actiVera">Acti-Vera:</label>
+            </strong>
         </div>
 
         <button id="calculate">Berechnen</button>
