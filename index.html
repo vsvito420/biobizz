@@ -10,48 +10,64 @@
         href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <div class="navbar">
+        <button class="nav-button"><a href="index.html">Index</a></button>
+        <button class="nav-button"><a href="https://github.com/vsvito420/biobizz">Github</a></button>
+        <button class="nav-button"><a href="contact.asp">Contact</a></button>
+        <button class="nav-button"><a href="about.asp">sample text</a></button>
+    </div>
     <script src="script.js" defer></script>
     <title>Dünger Rechner</title>
 </head>
 
-<body style="background-color:#333333; text-align: center;" > 
-    
+<body style="background-color:#333333; text-align: center; text-decoration-color:blue ;">
+
     <div style="background-color:white;" style="background-color:#9b9b9b; border-color: black;">
-        <h1>BioBizz Dünger Rechner</h1>
+        <h1  style="background-color: #333333;">BioBizz Dünger Rechner</h1>
         <hr>
-        <h2><a href="https://github.com/vsvito420/biobizz">vsvito420 auf GitHub</a></h2>
         <img src="image2.png" width="90%">
     </div>
 
     <div class="container" style="background-color:#9b9b9b; border-color: black;">
         <div class="slider-container">
-            <label for="week">Woche:&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;</label>
+            <label for="week">Woche:</label>
             <input type="range" id="week" min="0" max="10" value="0" class="slider">
             <span id="weekValue">0</span>
         </div>
 
         <div class="slider-container">
-            <label for="watering">Menge an Wasser (in ml):&emsp;&emsp;</label>
+            <label for="watering">Wasser:</label>
             <input type="range" id="watering" min="0" max="2000" value="0" step="100" class="slider">
             <span id="wateringValue">0</span>
         </div>
 
-        <div class="fertilizers" style="align-items: right" >
-            <strong>
+        <div class="fertilizers">
+            <button class="fertilizer-btn">
                 <label for="rootJuice">Root-Juice:</label>
+            </button>
+            <button class="fertilizer-btn">
                 <label for="bioGrow">BioGrow:</label>
+            </button>
+            <button class="fertilizer-btn">
                 <label for="bioBloom">BioBloom:</label>
+            </button>
+            <button class="fertilizer-btn">
                 <label for="bioHeaven">BioHeaven:</label>
+            </button>
+            <button class="fertilizer-btn">
                 <label for="topMax">Top-Max:</label>
+            </button>
+            <button class="fertilizer-btn">
                 <label for="actiVera">Acti-Vera:</label>
-            </strong>
+            </button>
         </div>
+
 
         <button id="calculate">Berechnen</button>
 
         <div id="results" class="hidden">
             <h2>Ergebnisse</h2>
-            <ul id="resultList"></ul>
+            <ul style="background-color: #333333;" id="resultList"></ul>
         </div>
     </div>
 </body>
