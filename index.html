@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+  <title>Dünger Rechner</title>
+</head>
+<body>
+  <h1>Dünger Rechner</h1>
+  <div class="container">
+    <label for="week">Woche:</label>
+    <input type="number" id="week" min="0" max="10">
+
+    <label for="watering">Menge an Wasser (in ml):</label>
+    <input type="number" id="watering" min="0">
+
+    <div class="fertilizers">
+      <label for="rootJuice">Root-Juice:</label>
+      <input type="checkbox" id="rootJuice" checked>
+
+      <label for="bioGrow">BioGrow:</label>
+      <input type="checkbox" id="bioGrow" checked>
+
+      <label for="bioBloom">BioBloom:</label>
+      <input type="checkbox" id="bioBloom" checked>
+
+      <label for="bioHeaven">BioHeaven:</label>
+      <input type="checkbox" id="bioHeaven" checked>
+
+      <label for="topMax">Top-Max:</label>
+      <input type="checkbox" id="topMax" checked>
+
+      <label for="actiVera">Acti-Vera:</label>
+      <input type="checkbox" id="actiVera" checked>
+    </div>
+
+    <button id="calculate">Berechnen</button>
+
+    <div id="results" class="hidden">
+      <h2>Ergebnisse</h2>
+      <ul id="resultList"></ul>
+    </div>
+  </div>
+</body>
+</html>

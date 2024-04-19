@@ -1,0 +1,31 @@
+body {
+    font-family: 'Ubuntu', Arial, sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-top: 10px;
+  }
+  
+  input,
+  label {
+    margin-right: 10px;
+  }
+  
+  button {
+    align-self: center;
+    margin: 20px 0;
+    padding: 10px 20px;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
