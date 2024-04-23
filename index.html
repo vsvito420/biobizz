@@ -10,26 +10,12 @@
   <title>Dünger Rechner</title>
 </head>
 <body>
-  <div class="navbar">
-    <button class="nav-button"><a href="index.html">Index</a></button>
-    <button class="nav-button"><a href="https://github.com/vsvito420/biobizz">Github</a></button>
-    <button class="nav-button"><a href="contact.asp">Contact</a></button>
-    <button class="nav-button"><a href="about.asp">sample text</a></button>
-  </div>
+  
   <div class="container">
     <h1>BioBizz Dünger Rechner</h1>
+    <h2>All Mix</h2>
     <hr>
-    <img src="image2.png" width="100%">
-    <div class="slider-container">
-      <label for="week">Woche:</label>
-      <input type="range" id="week" min="0" max="10" value="0" class="slider">
-      <span id="weekValue">0</span>
-    </div>
-    <div class="slider-container">
-      <label for="watering">Wasser:</label>
-      <input type="range" id="watering" min="0" max="2000" value="0" step="100" class="slider">
-      <span id="wateringValue">0</span>
-    </div>
+
     <div class="fertilizers">
       <button class="fertilizer-btn" style="background-color:#6d5653;">
         <label for="rootJuice">Root Juice</label>
@@ -50,12 +36,31 @@
         <label for="actiVera">Acti Vera</label>
       </button>
     </div>
-    <button id="calculate">Berechnen</button>
+
+    <div class="slider-container">
+      <label for="week">Woche:</label>
+      <input type="range" id="week" min="0" max="10" value="0" class="slider">
+      <span id="weekValue">0</span>
+    </div>
+    <div class="slider-container">
+      <label for="watering">Wasser:</label>
+      <input type="range" id="watering" min="0" max="2000" value="0" step="100" class="slider">
+      <span id="wateringValue">0</span>
+    </div>
     <div id="results" class="hidden">
       <h2>Ergebnisse</h2>
-      <ul id="resultList"></ul>
+      <ul id="resultList" ></ul>
     </div>
+    
   </div>
   <script src="script.js" defer></script>
 </body>
+<footer>
+  <div class="navbar">
+    <button class="nav-button"><a href="index.html">Index</a></button>
+    <button class="nav-button"><a href="https://github.com/vsvito420/biobizz">Github</a></button>
+    <button class="nav-button"><a href="contact.asp">Contact</a></button>
+    <button class="nav-button"><a href="about.asp">sample text</a></button>
+  </div>
+</footer>
 </html>
