@@ -1,21 +1,26 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <title>Dünger Rechner</title>
+
+  <h1>BioBizz Dünger Rechner</h1>
+  <h2>All Mix</h2>
+  <hr>
+
 </head>
+
 <body>
 
   <div class="container">
-    <h1>BioBizz Dünger Rechner</h1>
-    <h2>All Mix</h2>
-    <hr>
-
     <div class="fertilizers">
       <div class="fertilizer-item">
         <input type="checkbox" id="rootJuice" checked>
@@ -48,26 +53,29 @@
         <span class="result"></span>
       </div>
     </div>
-
-    <div class="slider-container">
-      <label for="week">Woche:</label>
-      <input type="range" id="week" min="0" max="10" value="0" class="slider">
-      <span id="weekValue">0</span>
-    </div>
-    <div class="slider-container">
-      <label for="watering">Wasser:</label>
-      <input type="range" id="watering" min="0" max="2000" value="0" step="100" class="slider">
-      <span id="wateringValue">0</span>
-    </div>
   </div>
   <script src="script.js" defer></script>
 </body>
 <footer>
+  <div class="slider-container">
+    <label for="week">Woche:</label>
+    <input type="range" id="week" min="0" max="10" value="0" class="slider">
+    <span id="weekValue">0</span>
+  </div>
+
+  <div class="slider-container">
+    <label for="watering">Wasser:</label>
+    <input type="range" id="watering" min="0" max="2000" value="0" step="100" class="slider">
+    <span id="wateringValue">0</span>
+  </div>
+
+
   <div class="navbar">
     <button class="nav-button"><a href="index.html">Index</a></button>
     <button class="nav-button"><a href="https://github.com/vsvito420/biobizz">Github</a></button>
-    <button class="nav-button"><a href="contact.asp">Contact</a></button>
-    <button class="nav-button"><a href="about.asp">sample text</a></button>
+    <button class="nav-button" onclick="downloadCSV()"> Download CSV</button>
+    <button class="nav-button"><a href="https://www.biobizz.com/de/produkte/">BioBizz Produkte</a></button>
   </div>
 </footer>
+
 </html>

@@ -13,6 +13,26 @@ const fertilizers = {
   actiVera: { checked: true, mlPerL: [2, 2, 2, 3, 4, 4, 5, 5, 5, 0, 0] },
 };
 
+function convertToCSV() {
+  let csv = 'Name,Checked,mlPerL\n';
+  for (const [name, { checked, mlPerL }] of Object.entries(fertilizers)) {
+    csv += `${name},${checked},${mlPerL.join(',')}\n`;
+  }
+  return csv;
+}
+
+function downloadCSV() {
+  const csv = convertToCSV();
+  const link = document.createElement('a');
+  link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  link.target = '_blank';
+  link.download = 'calculation.csv';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+}
+
+
 // Calculation function
 function calculate() {
   const week = parseInt(weekInput.value);
@@ -71,3 +91,4 @@ wateringSlider.addEventListener("input", () => {
 });
 
 calculate();
+
