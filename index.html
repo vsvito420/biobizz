@@ -10,31 +10,43 @@
   <title>Dünger Rechner</title>
 </head>
 <body>
-  
+
   <div class="container">
     <h1>BioBizz Dünger Rechner</h1>
     <h2>All Mix</h2>
     <hr>
 
     <div class="fertilizers">
-      <button class="fertilizer-btn" style="background-color:#6d5653;">
+      <div class="fertilizer-item">
+        <input type="checkbox" id="rootJuice" checked>
         <label for="rootJuice">Root Juice</label>
-      </button>
-      <button class="fertilizer-btn" style="background-color:#446e4a;">
+        <span class="result"></span>
+      </div>
+      <div class="fertilizer-item">
+        <input type="checkbox" id="bioGrow" checked>
         <label for="bioGrow">Bio Grow</label>
-      </button>
-      <button class="fertilizer-btn" style="background-color:#f8ac9a;">
+        <span class="result"></span>
+      </div>
+      <div class="fertilizer-item">
+        <input type="checkbox" id="bioBloom" checked>
         <label for="bioBloom">Bio Bloom</label>
-      </button>
-      <button class="fertilizer-btn" style="background-color:#3693a4;">
+        <span class="result"></span>
+      </div>
+      <div class="fertilizer-item">
+        <input type="checkbox" id="bioHeaven" checked>
         <label for="bioHeaven">Bio Heaven</label>
-      </button>
-      <button class="fertilizer-btn" style="background-color:#b04241;">
+        <span class="result"></span>
+      </div>
+      <div class="fertilizer-item">
+        <input type="checkbox" id="topMax" checked>
         <label for="topMax">Top Max</label>
-      </button>
-      <button class="fertilizer-btn" style="background-color:#699442;">
+        <span class="result"></span>
+      </div>
+      <div class="fertilizer-item">
+        <input type="checkbox" id="actiVera" checked>
         <label for="actiVera">Acti Vera</label>
-      </button>
+        <span class="result"></span>
+      </div>
     </div>
 
     <div class="slider-container">
@@ -47,11 +59,6 @@
       <input type="range" id="watering" min="0" max="2000" value="0" step="100" class="slider">
       <span id="wateringValue">0</span>
     </div>
-    <div id="results" class="hidden">
-      <h2>Ergebnisse</h2>
-      <ul id="resultList" ></ul>
-    </div>
-    
   </div>
   <script src="script.js" defer></script>
 </body>
