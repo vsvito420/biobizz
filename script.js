@@ -32,7 +32,6 @@ function downloadCSV() {
   document.body.removeChild(link);
 }
 
-
 // Calculation function
 function calculate() {
   const week = parseInt(weekInput.value);
@@ -90,5 +89,97 @@ wateringSlider.addEventListener("input", () => {
   calculate();
 });
 
-calculate();
+// Get the canvas and create a chart instance
+const fertilizerChartCanvas = document.getElementById("fertilizerChart");
+const fertilizerChart = new Chart(fertilizerChartCanvas, {
+  type: "pie",
+  data: {
+    labels: [],
+    datasets: [
+      {
+        label: "Fertilizer Mix",
+        data: [],
+        backgroundColor: [],
+        borderWidth: 1,
+      },
+    ],
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "top",
+      },
+      title: {
+        display: true,
+        text: "Fertilizer Mix",
+      },
+    },
+  },
+});
 
+function updateChart() {
+  const data = fertilizersData();
+  fertilizerChart.data.labels = data.labels;
+  fertilizerChart.data.datasets[0].data = data.data;
+  fertilizerChart.data.datasets[0].backgroundColor = data.colors;
+  fertilizerChart.update();
+}
+
+function fertilizersData() {
+  const week = parseInt(weekInput.value);
+  const watering = parseInt(wateringInput.value);
+  const labels = [];
+  const data = [];
+  const colors = [];
+
+  for (const [name, { checked, mlPerL }] of Object.entries(fertilizers)) {
+    if (!checked) continue;
+
+    const ml = (mlPerL[week] / 1000) * watering;
+    labels.push(name);
+    data.push(ml);
+    colors.push(getColor(name));
+  }
+
+  return { labels, data, colors };
+}
+
+function getColor(name) {
+  const fertilizerColors = {
+    rootJuice: "#6d5653",
+    bioGrow: "#446e4a",
+    bioBloom: "#f8ac9a",
+    bioHeaven: "#3693a4",
+    topMax: "#b04241",
+    actiVera: "#699442",
+  };
+
+  return fertilizerColors[name];
+}
+
+// Call updateChart after calculate in the event listeners
+weekInput.addEventListener("input", () => {
+  calculate();
+  updateChart();
+});
+
+wateringInput.addEventListener("input", () => {
+  calculate();
+  updateChart();
+});
+
+// Call updateChart after the checkbox event listener
+for (const [name, { checked }] of Object.entries(fertilizers)) {
+  // ...
+  input.addEventListener("input", (e) => {
+    fertilizers[e.target.id].checked = e.target.checked;
+    calculate();
+    updateChart();
+  });
+}
+
+// Call updateChart after calculate at the end
+calculate();
+updateChart();
