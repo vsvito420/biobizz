@@ -13,37 +13,35 @@
   <div class="container">
     <h1>BioBizz Dünger Rechner</h1>
     <h2>All Mix</h2>
-    <hr>
-
     <div class="fertilizers">
       <div class="fertilizer-item">
         <input type="checkbox" id="rootJuice" checked>
-        <label for="rootJuice">Root Juice</label>
+        <label for="rootJuice"><b>Root Juice</b></label>
         <span class="result"></span>
       </div>
       <div class="fertilizer-item">
         <input type="checkbox" id="bioGrow" checked>
-        <label for="bioGrow">Bio Grow</label>
+        <label for="bioGrow"><b>Bio Grow</b></label>
         <span class="result"></span>
       </div>
       <div class="fertilizer-item">
         <input type="checkbox" id="bioBloom" checked>
-        <label for="bioBloom">Bio Bloom</label>
+        <label for="bioBloom"><b>Bio Bloom</b></label>
         <span class="result"></span>
       </div>
       <div class="fertilizer-item">
         <input type="checkbox" id="bioHeaven" checked>
-        <label for="bioHeaven">Bio Heaven</label>
+        <label for="bioHeaven"><b>Bio Heaven</b></label>
         <span class="result"></span>
       </div>
       <div class="fertilizer-item">
         <input type="checkbox" id="topMax" checked>
-        <label for="topMax">Top Max</label>
+        <label for="topMax"><b>Top Max</b></label>
         <span class="result"></span>
       </div>
       <div class="fertilizer-item">
         <input type="checkbox" id="actiVera" checked>
-        <label for="actiVera">Acti Vera</label>
+        <label for="actiVera"><b>Acti Vera</b></label>
         <span class="result"></span>
       </div>
     </div>
@@ -62,18 +60,21 @@
       <span id="wateringValue">0</span>
     </div>
 
+    <hr>
+
     <div class="navbar">
-      <button class="nav-button"><a href="index.html">Index</a></button>
       <button class="nav-button"><a href="https://github.com/vsvito420/biobizz">Github</a></button>
       <button class="nav-button" onclick="downloadCSV()"> Download CSV</button>
       <button class="nav-button"><a href="https://www.biobizz.com/de/produkte/">BioBizz Produkte</a></button>
     </div>
+    <p>Ich habe den rechner anhand von dieser biobizz tabelle entworfen: https://www.biobizz.com/wp-content/uploads/2023/10/DE-Nutrient-Schedule-2023.pdf</p>
+    <h3>Woche 0 = Vegetationsphase</h3>
   </footer>
-
+  
   <div class="chart-container">
     <canvas id="fertilizerChart"></canvas>
   </div>
-
+  
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="script.js" defer></script>
 </body>

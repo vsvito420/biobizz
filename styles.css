@@ -2,10 +2,10 @@ body {
   font-family: 'Ubuntu', Arial, sans-serif;
   max-width: 800px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 10px;
   background-color: #2b2b2b;
   color: #000000;
-  line-height: 1.6;
+  line-height: 1.2;
 }
 
 .container {
