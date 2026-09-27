@@ -3,79 +3,90 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BioBizz All-Mix Dünger Rechner: berechnet die Düngermenge in ml pro Woche und Wassermenge.">
+  <meta name="theme-color" content="#1b1f1c">
+  <title>BioBizz Dünger Rechner</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌱</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  <title>Dünger Rechner</title>
 </head>
 <body>
-  <div class="container">
-    <h1>BioBizz Dünger Rechner</h1>
-    <h2>All Mix</h2>
-    <div class="fertilizers">
-      <div class="fertilizer-item">
-        <input type="checkbox" id="rootJuice" checked>
-        <label for="rootJuice"><b>Root Juice</b></label>
-        <span class="result"></span>
-      </div>
-      <div class="fertilizer-item">
-        <input type="checkbox" id="bioGrow" checked>
-        <label for="bioGrow"><b>Bio Grow</b></label>
-        <span class="result"></span>
-      </div>
-      <div class="fertilizer-item">
-        <input type="checkbox" id="bioBloom" checked>
-        <label for="bioBloom"><b>Bio Bloom</b></label>
-        <span class="result"></span>
-      </div>
-      <div class="fertilizer-item">
-        <input type="checkbox" id="bioHeaven" checked>
-        <label for="bioHeaven"><b>Bio Heaven</b></label>
-        <span class="result"></span>
-      </div>
-      <div class="fertilizer-item">
-        <input type="checkbox" id="topMax" checked>
-        <label for="topMax"><b>Top Max</b></label>
-        <span class="result"></span>
-      </div>
-      <div class="fertilizer-item">
-        <input type="checkbox" id="actiVera" checked>
-        <label for="actiVera"><b>Acti Vera</b></label>
-        <span class="result"></span>
-      </div>
-    </div>
-  </div>
+  <main class="container">
+    <header class="header">
+      <h1>🌱 BioBizz Dünger Rechner</h1>
+      <p class="subtitle">All-Mix · Menge pro Gießkanne berechnen</p>
+    </header>
 
-  <footer>
-    <div class="slider-container">
-      <label for="week">Woche:</label>
-      <input type="range" id="week" min="0" max="10" value="0" class="slider">
-      <span id="weekValue">0</span>
-    </div>
+    <section class="card controls" aria-label="Eingaben">
+      <div class="control">
+        <div class="control-head">
+          <label for="week">Woche</label>
+          <span class="phase" id="phase"></span>
+        </div>
+        <div class="control-row">
+          <input type="range" id="week" min="0" max="10" value="0" step="1">
+          <output id="weekValue" for="week">0</output>
+        </div>
+      </div>
 
-    <div class="slider-container">
-      <label for="watering">Wasser:</label>
-      <input type="range" id="watering" min="0" max="2000" value="0" step="100" class="slider">
-      <span id="wateringValue">0</span>
-    </div>
+      <div class="control">
+        <div class="control-head">
+          <label for="watering">Wassermenge</label>
+          <div class="presets" role="group" aria-label="Schnellauswahl Wasser">
+            <button type="button" data-liters="1">1 L</button>
+            <button type="button" data-liters="5">5 L</button>
+            <button type="button" data-liters="10">10 L</button>
+          </div>
+        </div>
+        <div class="control-row">
+          <input type="range" id="watering" min="0.1" max="20" value="1" step="0.1">
+          <span class="number-wrap">
+            <input type="number" id="wateringNumber" min="0.1" max="1000" step="0.1" value="1" inputmode="decimal" aria-label="Wassermenge in Litern">
+            <span class="unit">L</span>
+          </span>
+        </div>
+      </div>
+    </section>
 
-    <hr>
+    <section class="card" aria-label="Ergebnis">
+      <ul class="fertilizers" id="fertilizers"></ul>
+      <div class="total">
+        <span>Gesamt</span>
+        <strong id="total">0 ml</strong>
+      </div>
+    </section>
 
-    <div class="navbar">
-      <button class="nav-button"><a href="https://github.com/vsvito420/biobizz">Github</a></button>
-      <button class="nav-button" onclick="downloadCSV()"> Download CSV</button>
-      <button class="nav-button"><a href="https://www.biobizz.com/de/produkte/">BioBizz Produkte</a></button>
-    </div>
-    <p>Ich habe den rechner anhand von dieser biobizz tabelle entworfen: <a href="https://www.biobizz.com/wp-content/uploads/2023/10/DE-Nutrient-Schedule-2023.pdf"</a>https://www.biobizz.com/wp-content/uploads/2023/10/DE-Nutrient-Schedule-2023.pdf</p>
-    <h3>Woche 0 = Vegetationsphase</h3>
-  </footer>
-  
-  <div class="chart-container">
-    <canvas id="fertilizerChart"></canvas>
-  </div>
-  
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <section class="card chart-card" aria-label="Diagramm">
+      <div class="chart-container">
+        <canvas id="fertilizerChart" aria-label="Verteilung der Dünger" role="img"></canvas>
+        <p class="chart-empty" id="chartEmpty" hidden>In dieser Woche wird nur mit klarem Wasser gegossen.</p>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Düngeschema">
+      <h2>Düngeschema (ml pro Liter)</h2>
+      <div class="table-wrap">
+        <table id="schedule"></table>
+      </div>
+      <p class="hint">Tipp: Klick auf eine Spalte, um die Woche auszuwählen.</p>
+    </section>
+
+    <nav class="actions">
+      <button type="button" class="btn" id="downloadCsv">⬇ CSV herunterladen</button>
+      <a class="btn" href="https://www.biobizz.com/de/produkte/" target="_blank" rel="noopener">BioBizz Produkte</a>
+      <a class="btn" href="https://github.com/vsvito420/biobizz" target="_blank" rel="noopener">GitHub</a>
+    </nav>
+
+    <footer class="footer">
+      <p>Grundlage ist das offizielle
+        <a href="https://www.biobizz.com/wp-content/uploads/2023/10/DE-Nutrient-Schedule-2023.pdf" target="_blank" rel="noopener">BioBizz Düngeschema 2023 (PDF)</a>.
+        Woche 0 = Vegetationsphase. Angaben ohne Gewähr.</p>
+    </footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="script.js" defer></script>
 </body>
 </html>
