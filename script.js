@@ -1,185 +1,223 @@
-// Get the elements from the DOM
-const weekInput = document.getElementById("week");
-const wateringInput = document.getElementById("watering");
-const resultItems = document.querySelectorAll(".fertilizer-item .result");
+// BioBizz All-Mix Dünger Rechner
 
-// Define an object containing the fertilizers with their properties
-const fertilizers = {
-  rootJuice: { checked: true, mlPerL: [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
-  bioGrow: { checked: true, mlPerL: [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0] },
-  bioBloom: { checked: true, mlPerL: [0, 1, 2, 2, 3, 3, 4, 4, 4, 0, 0] },
-  bioHeaven: { checked: true, mlPerL: [2, 2, 2, 3, 4, 4, 5, 5, 5, 0, 0] },
-  topMax: { checked: true, mlPerL: [0, 1, 1, 1, 1, 4, 4, 4, 4, 0, 0] },
-  actiVera: { checked: true, mlPerL: [2, 2, 2, 3, 4, 4, 5, 5, 5, 0, 0] },
+// ml pro Liter Wasser, Index = Woche (0 = Vegetationsphase)
+const FERTILIZERS = [
+  { id: "rootJuice", name: "Root Juice", color: "#8a6d5a", mlPerL: [4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] },
+  { id: "bioGrow",   name: "Bio Grow",   color: "#4f8a58", mlPerL: [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0] },
+  { id: "bioBloom",  name: "Bio Bloom",  color: "#f3a08c", mlPerL: [0, 1, 2, 2, 3, 3, 4, 4, 4, 0, 0] },
+  { id: "bioHeaven", name: "Bio Heaven", color: "#3a9db0", mlPerL: [2, 2, 2, 3, 4, 4, 5, 5, 5, 0, 0] },
+  { id: "topMax",    name: "Top Max",    color: "#c24d4b", mlPerL: [0, 1, 1, 1, 1, 4, 4, 4, 4, 0, 0] },
+  { id: "actiVera",  name: "Acti Vera",  color: "#7fae4e", mlPerL: [2, 2, 2, 3, 4, 4, 5, 5, 5, 0, 0] },
+];
+
+const WEEKS = FERTILIZERS[0].mlPerL.length;
+const STORAGE_KEY = "biobizz-state-v2";
+
+function phaseFor(week) {
+  if (week === 0) return "Vegetationsphase";
+  if (week >= 9) return "Spülen (nur Wasser)";
+  return `Blüte · Woche ${week}`;
+}
+
+// ---- State ---------------------------------------------------------------
+
+const state = {
+  week: 0,
+  liters: 1,
+  enabled: Object.fromEntries(FERTILIZERS.map((f) => [f.id, true])),
 };
 
-function convertToCSV() {
-  let csv = 'Name,Checked,mlPerL\n';
-  for (const [name, { checked, mlPerL }] of Object.entries(fertilizers)) {
-    csv += `${name},${checked},${mlPerL.join(',')}\n`;
-  }
-  return csv;
+function loadState() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+    if (!saved) return;
+    if (Number.isInteger(saved.week) && saved.week >= 0 && saved.week < WEEKS) state.week = saved.week;
+    if (typeof saved.liters === "number" && saved.liters > 0) state.liters = saved.liters;
+    if (saved.enabled) Object.assign(state.enabled, saved.enabled);
+  } catch (_) { /* Speicher nicht verfügbar */ }
 }
 
-function downloadCSV() {
-  const csv = convertToCSV();
-  const link = document.createElement('a');
-  link.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-  link.target = '_blank';
-  link.download = 'calculation.csv';
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+function saveState() {
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) { /* ignorieren */ }
 }
 
-// Calculation function
-function calculate() {
-  const week = parseInt(weekInput.value);
-  const watering = parseInt(wateringInput.value);
+// ---- DOM -----------------------------------------------------------------
 
-  // Check if the inputs are valid numbers
-  if (isNaN(week) || isNaN(watering)) {
-    alert("Bitte geben Sie eine gültige Woche und Wassermenge ein.");
-    return;
-  }
+const $ = (id) => document.getElementById(id);
+const weekInput = $("week");
+const weekValue = $("weekValue");
+const phaseEl = $("phase");
+const wateringRange = $("watering");
+const wateringNumber = $("wateringNumber");
+const list = $("fertilizers");
+const totalEl = $("total");
+const scheduleTable = $("schedule");
+const chartEmpty = $("chartEmpty");
 
-  // Calculate the fertilizer amounts and display the results
-  for (const [name, { checked, mlPerL }] of Object.entries(fertilizers)) {
-    if (!checked) continue;
+weekInput.max = WEEKS - 1;
 
-    const ml = (mlPerL[week] / 1000) * watering;
-    const resultItem = document.querySelector(`.fertilizer-item input[id="${name}"] + label + .result`);
-    resultItem.textContent = `${ml.toFixed(2)} ml`;
+const fmt = (n) => n.toLocaleString("de-DE", { minimumFractionDigits: n % 1 ? 1 : 0, maximumFractionDigits: 2 });
+
+function mlFor(f) {
+  return f.mlPerL[state.week] * state.liters;
+}
+
+function buildList() {
+  list.innerHTML = "";
+  for (const f of FERTILIZERS) {
+    const li = document.createElement("li");
+    li.className = "fertilizer-item";
+    li.style.setProperty("--c", f.color);
+    li.innerHTML = `
+      <label>
+        <input type="checkbox" data-id="${f.id}">
+        <span class="swatch" aria-hidden="true"></span>
+        <span class="name">${f.name}</span>
+      </label>
+      <span class="rate"></span>
+      <span class="result"></span>`;
+    li.querySelector("input").addEventListener("change", (e) => {
+      state.enabled[f.id] = e.target.checked;
+      render();
+    });
+    list.appendChild(li);
   }
 }
 
-// Event listeners for the input elements
-weekInput.addEventListener("input", calculate);
-wateringInput.addEventListener("input", calculate);
-
-// Event listeners for the checkboxes
-for (const [name, { checked }] of Object.entries(fertilizers)) {
-  const input = document.querySelector(`.fertilizer-item input[id="${name}"]`);
-  input.checked = checked;
-  input.addEventListener("input", (e) => {
-    fertilizers[e.target.id].checked = e.target.checked;
-    calculate();
+function buildSchedule() {
+  const head = `<thead><tr><th scope="col">Dünger</th>${
+    Array.from({ length: WEEKS }, (_, w) => `<th scope="col" data-week="${w}">${w === 0 ? "Veg" : "W" + w}</th>`).join("")
+  }</tr></thead>`;
+  const body = FERTILIZERS.map((f) => `<tr><th scope="row"><span class="swatch" style="--c:${f.color}"></span>${f.name}</th>${
+    f.mlPerL.map((v, w) => `<td data-week="${w}">${v || "–"}</td>`).join("")
+  }</tr>`).join("");
+  scheduleTable.innerHTML = head + `<tbody>${body}</tbody>`;
+  scheduleTable.addEventListener("click", (e) => {
+    const cell = e.target.closest("[data-week]");
+    if (!cell) return;
+    state.week = Number(cell.dataset.week);
+    render();
   });
 }
 
-// Get the week slider and display its value
-const weekSlider = document.getElementById("week");
-const weekValue = document.getElementById("weekValue");
-weekValue.textContent = weekSlider.value;
+// ---- Chart ---------------------------------------------------------------
 
-// Update the displayed value when the slider value changes
-weekSlider.addEventListener("input", () => {
-  weekValue.textContent = weekSlider.value;
-  calculate();
-});
-
-// Get the watering slider and display its value
-const wateringSlider = document.getElementById("watering");
-const wateringValue = document.getElementById("wateringValue");
-wateringValue.textContent = wateringSlider.value;
-
-// Update the displayed value when the slider value changes
-wateringSlider.addEventListener("input", () => {
-  wateringValue.textContent = wateringSlider.value;
-  calculate();
-});
-
-// Get the canvas and create a chart instance
-const fertilizerChartCanvas = document.getElementById("fertilizerChart");
-const fertilizerChart = new Chart(fertilizerChartCanvas, {
-  type: "pie",
-  data: {
-    labels: [],
-    datasets: [
-      {
-        label: "Fertilizer Mix",
-        data: [],
-        backgroundColor: [],
-        borderWidth: 1,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: "Fertilizer Mix",
+let chart = null;
+if (window.Chart) {
+  chart = new Chart($("fertilizerChart"), {
+    type: "doughnut",
+    data: { labels: [], datasets: [{ data: [], backgroundColor: [], borderColor: "#1b1f1c", borderWidth: 2 }] },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: "55%",
+      plugins: {
+        legend: { position: "bottom", labels: { color: "#dfe6e0", font: { family: "Ubuntu" }, boxWidth: 14 } },
+        tooltip: { callbacks: { label: (ctx) => ` ${ctx.label}: ${fmt(ctx.parsed)} ml` } },
       },
     },
-  },
-});
-
-function updateChart() {
-  const data = fertilizersData();
-  fertilizerChart.data.labels = data.labels;
-  fertilizerChart.data.datasets[0].data = data.data;
-  fertilizerChart.data.datasets[0].backgroundColor = data.colors;
-  fertilizerChart.update();
-}
-
-function fertilizersData() {
-  const week = parseInt(weekInput.value);
-  const watering = parseInt(wateringInput.value);
-  const labels = [];
-  const data = [];
-  const colors = [];
-
-  for (const [name, { checked, mlPerL }] of Object.entries(fertilizers)) {
-    if (!checked) continue;
-
-    const ml = (mlPerL[week] / 1000) * watering;
-    labels.push(name);
-    data.push(ml);
-    colors.push(getColor(name));
-  }
-
-  return { labels, data, colors };
-}
-
-function getColor(name) {
-  const fertilizerColors = {
-    rootJuice: "#6d5653",
-    bioGrow: "#446e4a",
-    bioBloom: "#f8ac9a",
-    bioHeaven: "#3693a4",
-    topMax: "#b04241",
-    actiVera: "#699442",
-  };
-
-  return fertilizerColors[name];
-}
-
-// Call updateChart after calculate in the event listeners
-weekInput.addEventListener("input", () => {
-  calculate();
-  updateChart();
-});
-
-wateringInput.addEventListener("input", () => {
-  calculate();
-  updateChart();
-});
-
-// Call updateChart after the checkbox event listener
-for (const [name, { checked }] of Object.entries(fertilizers)) {
-  // ...
-  input.addEventListener("input", (e) => {
-    fertilizers[e.target.id].checked = e.target.checked;
-    calculate();
-    updateChart();
   });
 }
 
-// Call updateChart after calculate at the end
-calculate();
-updateChart();
+function updateChart(active) {
+  const shown = active.filter(({ ml }) => ml > 0);
+  chartEmpty.hidden = shown.length > 0;
+  if (!chart) return;
+  chart.data.labels = shown.map(({ f }) => f.name);
+  chart.data.datasets[0].data = shown.map(({ ml }) => ml);
+  chart.data.datasets[0].backgroundColor = shown.map(({ f }) => f.color);
+  chart.update();
+}
+
+// ---- Render --------------------------------------------------------------
+
+function render() {
+  weekInput.value = state.week;
+  weekValue.textContent = state.week === 0 ? "Veg" : state.week;
+  phaseEl.textContent = phaseFor(state.week);
+  wateringRange.value = Math.min(state.liters, Number(wateringRange.max));
+  if (document.activeElement !== wateringNumber) wateringNumber.value = state.liters;
+
+  let total = 0;
+  const active = [];
+  for (const f of FERTILIZERS) {
+    const li = list.querySelector(`input[data-id="${f.id}"]`).closest("li");
+    const on = state.enabled[f.id];
+    const ml = mlFor(f);
+    li.querySelector("input").checked = on;
+    li.classList.toggle("off", !on);
+    li.classList.toggle("zero", on && ml === 0);
+    li.querySelector(".rate").textContent = `${f.mlPerL[state.week]} ml/L`;
+    li.querySelector(".result").textContent = on ? `${fmt(ml)} ml` : "–";
+    if (on) {
+      total += ml;
+      active.push({ f, ml });
+    }
+  }
+  totalEl.textContent = `${fmt(total)} ml`;
+
+  scheduleTable.querySelectorAll("[data-week]").forEach((el) => {
+    el.classList.toggle("current", Number(el.dataset.week) === state.week);
+  });
+
+  updateChart(active);
+  saveState();
+}
+
+// ---- CSV -----------------------------------------------------------------
+
+function downloadCSV() {
+  const rows = [["Dünger", "Aktiv", ...Array.from({ length: WEEKS }, (_, w) => (w === 0 ? "Veg (ml/L)" : `Woche ${w} (ml/L)`)),
+    `Woche ${state.week} bei ${state.liters} L (ml)`]];
+  for (const f of FERTILIZERS) {
+    rows.push([f.name, state.enabled[f.id] ? "ja" : "nein", ...f.mlPerL, mlFor(f).toFixed(2)]);
+  }
+  const csv = "﻿" + rows.map((r) => r.join(";")).join("\n");
+  const url = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `biobizz-woche-${state.week}.csv`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+// ---- Events --------------------------------------------------------------
+
+weekInput.addEventListener("input", () => {
+  state.week = Number(weekInput.value);
+  render();
+});
+
+wateringRange.addEventListener("input", () => {
+  state.liters = Number(wateringRange.value);
+  wateringNumber.value = state.liters;
+  render();
+});
+
+wateringNumber.addEventListener("input", () => {
+  const v = parseFloat(wateringNumber.value.replace(",", "."));
+  if (v > 0) {
+    state.liters = v;
+    render();
+  }
+});
+wateringNumber.addEventListener("blur", render);
+
+document.querySelectorAll("[data-liters]").forEach((btn) =>
+  btn.addEventListener("click", () => {
+    state.liters = Number(btn.dataset.liters);
+    wateringNumber.value = state.liters;
+    render();
+  })
+);
+
+$("downloadCsv").addEventListener("click", downloadCSV);
+
+// ---- Init ----------------------------------------------------------------
+
+loadState();
+buildList();
+buildSchedule();
+render();
