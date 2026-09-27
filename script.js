@@ -162,6 +162,7 @@ function render() {
 
   updateChart(active);
   saveState();
+  if (typeof journalRender === "function") journalRender();
 }
 
 // ---- CSV -----------------------------------------------------------------

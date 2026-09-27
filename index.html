@@ -19,6 +19,28 @@
       <p class="subtitle">All-Mix · Menge pro Gießkanne berechnen</p>
     </header>
 
+    <section class="card plant-bar" aria-label="Pflanze">
+      <div class="plant-row">
+        <label for="plantSelect" class="plant-label">🪴 Pflanze</label>
+        <select id="plantSelect"></select>
+        <button type="button" class="icon-btn" id="plantAdd" title="Neue Pflanze" aria-label="Neue Pflanze">＋</button>
+        <button type="button" class="icon-btn" id="plantEdit" title="Pflanze bearbeiten" aria-label="Pflanze bearbeiten" aria-expanded="false">✎</button>
+      </div>
+      <form class="plant-edit" id="plantForm" hidden>
+        <label>Name
+          <input type="text" id="plantName" maxlength="40" required>
+        </label>
+        <label>Blütebeginn (Woche 1)
+          <input type="date" id="plantStart">
+        </label>
+        <div class="plant-edit-actions">
+          <button type="submit" class="btn btn-primary">Speichern</button>
+          <button type="button" class="btn btn-danger" id="plantDelete">Löschen</button>
+        </div>
+      </form>
+      <p class="auto-week" id="autoWeek" hidden></p>
+    </section>
+
     <section class="card controls" aria-label="Eingaben">
       <div class="control">
         <div class="control-head">
@@ -58,6 +80,41 @@
       </div>
     </section>
 
+    <section class="card journal" aria-label="Gieß-Tagebuch">
+      <div class="journal-head">
+        <h2>💧 Gieß-Tagebuch</h2>
+        <span class="last-watered" id="lastWatered"></span>
+      </div>
+
+      <form class="log-form" id="logForm">
+        <label class="log-date">Datum
+          <input type="date" id="logDate" required>
+        </label>
+        <label class="log-note">Notiz
+          <input type="text" id="logNote" maxlength="200" placeholder="optional, z. B. pH 6,5">
+        </label>
+        <button type="submit" class="btn btn-primary log-submit" id="logSubmit">✓ Gegossen</button>
+      </form>
+      <p class="log-summary" id="logSummary"></p>
+
+      <div class="streak" id="streak" aria-label="Letzte 28 Tage"></div>
+
+      <ul class="log-list" id="logList"></ul>
+      <button type="button" class="btn btn-small" id="logMore" hidden>Mehr anzeigen</button>
+
+      <details class="backup">
+        <summary>Daten sichern &amp; übertragen</summary>
+        <p class="hint">Alle Einträge werden nur lokal in diesem Browser gespeichert. Mit einem Backup kannst du sie auf ein anderes Gerät übertragen.</p>
+        <div class="backup-actions">
+          <button type="button" class="btn btn-small" id="exportJson">⬇ Backup (JSON)</button>
+          <label class="btn btn-small">⬆ Backup laden
+            <input type="file" id="importJson" accept="application/json,.json" hidden>
+          </label>
+          <button type="button" class="btn btn-small" id="exportLogCsv">⬇ Tagebuch (CSV)</button>
+        </div>
+      </details>
+    </section>
+
     <section class="card chart-card" aria-label="Diagramm">
       <div class="chart-container">
         <canvas id="fertilizerChart" aria-label="Verteilung der Dünger" role="img"></canvas>
@@ -74,7 +131,7 @@
     </section>
 
     <nav class="actions">
-      <button type="button" class="btn" id="downloadCsv">⬇ CSV herunterladen</button>
+      <button type="button" class="btn" id="downloadCsv">⬇ Düngeschema (CSV)</button>
       <a class="btn" href="https://www.biobizz.com/de/produkte/" target="_blank" rel="noopener">BioBizz Produkte</a>
       <a class="btn" href="https://github.com/vsvito420/biobizz" target="_blank" rel="noopener">GitHub</a>
     </nav>
@@ -88,5 +145,6 @@
 
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <script src="script.js" defer></script>
+  <script src="journal.js" defer></script>
 </body>
 </html>
